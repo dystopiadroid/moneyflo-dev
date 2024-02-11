@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import { UiProvider } from "./providers";
+import { StoreProvider, UiProvider } from "./providers";
 import NavbarMain from "@/components/navbar/NavbarMain";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "MoneyFlo",
@@ -19,10 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark font-mono h-screen">
       <body className="h-screen">
-        <UiProvider>
-          <NavbarMain />
-          {children}
-        </UiProvider>
+        <StoreProvider>
+          <UiProvider>
+            <NavbarMain />
+            {children}
+          </UiProvider>
+        </StoreProvider>
       </body>
     </html>
   );
