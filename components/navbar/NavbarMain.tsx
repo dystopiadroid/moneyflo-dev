@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -6,8 +8,31 @@ import {
   NavbarItem,
 } from "@nextui-org/navbar";
 import { Link } from "@nextui-org/link";
+import { usePathname } from "next/navigation";
+import { Session } from "next-auth";
+import { Button } from "@nextui-org/button";
+import { IoExit } from "react-icons/io5";
+import { signOut } from "next-auth/react";
 
-function NavbarMain() {
+function NavbarMain({ session }: { session: Session | null }) {
+  const [activeTab, setActiveTab] = useState("");
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setActiveTab(pathname.substring(1, pathname.length));
+  }, [pathname]);
+
+  const headerNameTransform = (name: string | null | undefined) => {
+    if (name) {
+      if (name.search(" ") !== -1) {
+        return `${name.substring(0, name.indexOf(" "))}'s Tracker`;
+      } else {
+        return `${name}'s Tracker`;
+      }
+    }
+    return "";
+  };
+
   return (
     <Navbar
       classNames={{
@@ -29,21 +54,23 @@ function NavbarMain() {
     >
       <NavbarBrand>
         <Link className="font-bold text-white hover:cursor-pointer">
-          <p className="font-bold text-inherit text-2xl">MoneyFlo</p>
+          <p className="font-bold text-inherit text-2xl">
+            {session ? headerNameTransform(session.user?.name) : "MoneyFlo"}
+          </p>
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden text-lg gap-9 sm:flex " justify="center">
-        <NavbarItem isActive>
+        <NavbarItem isActive={activeTab === "income"}>
           <Link color="foreground" href="income">
             Incomes
           </Link>
         </NavbarItem>
-        <NavbarItem>
+        <NavbarItem isActive={activeTab === "investment"}>
           <Link color="foreground" href="investment">
             Investments
           </Link>
         </NavbarItem>
-        <NavbarItem>
+        <NavbarItem isActive={activeTab === "expense"}>
           <Link color="foreground" href="expense">
             Expenses
           </Link>
@@ -60,6 +87,22 @@ function NavbarMain() {
             <img src="linkedin.svg" className="h-12 w-12"></img>
           </Link>
         </NavbarItem>
+        {session && (
+          <NavbarItem>
+            <Button
+              color="danger"
+              className="font-bold text-1xl"
+              onClick={() =>
+                signOut({
+                  callbackUrl: "/",
+                })
+              }
+            >
+              <span>Logout</span>
+              <IoExit className="text-2xl" />
+            </Button>
+          </NavbarItem>
+        )}
       </NavbarContent>
     </Navbar>
   );

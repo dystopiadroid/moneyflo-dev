@@ -7,7 +7,11 @@ export default function GoogleSignInButton() {
   return (
     <Button
       color="primary"
-      onClick={() => signIn("google")}
+      onClick={() =>
+        signIn("google", {
+          callbackUrl: "/income",
+        })
+      }
       className="ml-5 rounded-full"
     >
       <span className="font-bold text-google">Log in with Google</span>
