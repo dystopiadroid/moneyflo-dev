@@ -13,10 +13,12 @@ import { Session } from "next-auth";
 import { Button } from "@nextui-org/button";
 import { IoExit } from "react-icons/io5";
 import { signOut } from "next-auth/react";
+import { useToast } from "../ui/use-toast";
 
 function NavbarMain({ session }: { session: Session | null }) {
   const [activeTab, setActiveTab] = useState("");
   const pathname = usePathname();
+  const { toast } = useToast();
 
   useEffect(() => {
     setActiveTab(pathname.substring(1, pathname.length));
@@ -48,13 +50,16 @@ function NavbarMain({ session }: { session: Session | null }) {
           "data-[active=true]:after:right-0",
           "data-[active=true]:after:h-[2px]",
           "data-[active=true]:after:rounded-[2px]",
-          "data-[active=true]:after:bg-primary",
+          "data-[active=true]:after:bg-primary-400",
         ],
       }}
     >
       <NavbarBrand>
         <Link className="font-bold text-white hover:cursor-pointer">
-          <p className="font-bold text-inherit text-2xl">
+          <p
+            className="font-bold text-inherit text-2xl"
+            onClick={() => toast({ title: "Hello" })}
+          >
             {session ? headerNameTransform(session.user?.name) : "MoneyFlo"}
           </p>
         </Link>

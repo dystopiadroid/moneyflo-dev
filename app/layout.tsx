@@ -4,6 +4,7 @@ import { StoreProvider, UiProvider } from "./providers";
 import NavbarMain from "@/components/navbar/NavbarMain";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "MoneyFlo",
@@ -24,6 +25,7 @@ export default async function RootLayout({
           <UiProvider>
             <NavbarMain session={session} />
             {children}
+            <Toaster />
           </UiProvider>
         </StoreProvider>
       </body>
