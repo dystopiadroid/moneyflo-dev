@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -16,12 +16,17 @@ function NavbarMain() {
   const [activeTab, setActiveTab] = useState("");
   const dispatch = useAppDispatch();
   const currentPage = useAppSelector((state) => state.page);
+  const authStatus = useAppSelector((state) => state.common.authStatus);
   const { toast } = useToast();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     setActiveTab(currentPage);
   }, [currentPage]);
+
+  if (status === "loading") {
+    return "";
+  }
 
   const headerNameTransform = (name: string | null | undefined) => {
     if (name) {

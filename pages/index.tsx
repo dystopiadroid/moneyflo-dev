@@ -7,12 +7,14 @@ import Expense from "./expense";
 import { setCurrentPage } from "@/lib/features/pageSlice";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const currentPage = useAppSelector((state) => state.page);
   const dispatch = useAppDispatch();
 
   if (!session) {
-    return (
+    status === "loading" ? (
+      "loading...."
+    ) : (
       <div className="h-content flex justify-center items-center">
         <WelcomePage />
       </div>
