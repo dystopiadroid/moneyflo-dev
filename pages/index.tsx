@@ -5,6 +5,7 @@ import Income from "./income";
 import Investment from "./investment";
 import Expense from "./expense";
 import { setCurrentPage } from "@/lib/features/pageSlice";
+import Loader from "./loader";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -14,7 +15,7 @@ export default function Home() {
   if (status === "loading") {
     return (
       <div className="h-content flex justify-center items-center">
-        <h1>Loading.....</h1>
+        <Loader />
       </div>
     );
   }

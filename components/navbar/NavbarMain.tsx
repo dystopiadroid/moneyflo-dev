@@ -16,7 +16,6 @@ function NavbarMain() {
   const [activeTab, setActiveTab] = useState("");
   const dispatch = useAppDispatch();
   const currentPage = useAppSelector((state) => state.page);
-  const authStatus = useAppSelector((state) => state.common.authStatus);
   const { toast } = useToast();
   const { data: session, status } = useSession();
 
