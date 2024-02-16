@@ -11,10 +11,16 @@ export default function Home() {
   const currentPage = useAppSelector((state) => state.page);
   const dispatch = useAppDispatch();
 
+  if (status === "loading") {
+    return (
+      <div className="h-content flex justify-center items-center">
+        <h1>Loading.....</h1>
+      </div>
+    );
+  }
+
   if (!session) {
-    status === "loading" ? (
-      "loading...."
-    ) : (
+    return (
       <div className="h-content flex justify-center items-center">
         <WelcomePage />
       </div>
