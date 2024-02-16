@@ -6,20 +6,22 @@ import {
   NavbarItem,
 } from "@nextui-org/navbar";
 import { Link } from "@nextui-org/link";
-import { usePathname } from "next/navigation";
 import { Button } from "@nextui-org/button";
 import { signOut, useSession } from "next-auth/react";
 import { useToast } from "../ui/use-toast";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { setCurrentPage } from "@/lib/features/pageSlice";
 
 function NavbarMain() {
   const [activeTab, setActiveTab] = useState("");
-  const pathname = usePathname();
+  const dispatch = useAppDispatch();
+  const currentPage = useAppSelector((state) => state.page);
   const { toast } = useToast();
   const { data: session } = useSession();
 
   useEffect(() => {
-    setActiveTab(pathname.substring(1, pathname.length));
-  }, [pathname]);
+    setActiveTab(currentPage);
+  }, [currentPage]);
 
   const headerNameTransform = (name: string | null | undefined) => {
     if (name) {
@@ -62,20 +64,32 @@ function NavbarMain() {
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden text-lg gap-9 sm:flex " justify="center">
-        <NavbarItem isActive={activeTab === "income"}>
-          <Link color="foreground" href="income">
-            Incomes
-          </Link>
+        <NavbarItem
+          isActive={activeTab === "income"}
+          onClick={
+            session ? () => dispatch(setCurrentPage("income")) : undefined
+          }
+          className="hover:cursor-pointer"
+        >
+          Incomes
         </NavbarItem>
-        <NavbarItem isActive={activeTab === "investment"}>
-          <Link color="foreground" href="investment">
-            Investments
-          </Link>
+        <NavbarItem
+          isActive={activeTab === "investment"}
+          onClick={
+            session ? () => dispatch(setCurrentPage("investment")) : undefined
+          }
+          className="hover:cursor-pointer"
+        >
+          Investments
         </NavbarItem>
-        <NavbarItem isActive={activeTab === "expense"}>
-          <Link color="foreground" href="expense">
-            Expenses
-          </Link>
+        <NavbarItem
+          isActive={activeTab === "expense"}
+          onClick={
+            session ? () => dispatch(setCurrentPage("expense")) : undefined
+          }
+          className="hover:cursor-pointer"
+        >
+          Expenses
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">

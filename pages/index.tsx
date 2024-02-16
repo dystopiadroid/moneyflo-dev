@@ -1,8 +1,15 @@
 import WelcomePage from "@/components/welcome/WelcomePage";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useSession } from "next-auth/react";
+import Income from "./income";
+import Investment from "./investment";
+import Expense from "./expense";
+import { setCurrentPage } from "@/lib/features/pageSlice";
 
 export default function Home() {
   const { data: session } = useSession();
+  const currentPage = useAppSelector((state) => state.page);
+  const dispatch = useAppDispatch();
 
   if (!session) {
     return (
@@ -12,5 +19,18 @@ export default function Home() {
     );
   }
 
-  return "";
+  if (session && currentPage === "init") {
+    dispatch(setCurrentPage("income"));
+  }
+
+  switch (currentPage) {
+    case "income":
+      return <Income />;
+    case "investment":
+      return <Investment />;
+    case "expense":
+      return <Expense />;
+    default:
+      return <Income />;
+  }
 }
