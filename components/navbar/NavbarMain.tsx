@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import {
   Navbar,
@@ -9,16 +7,15 @@ import {
 } from "@nextui-org/navbar";
 import { Link } from "@nextui-org/link";
 import { usePathname } from "next/navigation";
-import { Session } from "next-auth";
 import { Button } from "@nextui-org/button";
-import { IoExit } from "react-icons/io5";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useToast } from "../ui/use-toast";
 
-function NavbarMain({ session }: { session: Session | null }) {
+function NavbarMain() {
   const [activeTab, setActiveTab] = useState("");
   const pathname = usePathname();
   const { toast } = useToast();
+  const { data: session } = useSession();
 
   useEffect(() => {
     setActiveTab(pathname.substring(1, pathname.length));
@@ -104,7 +101,6 @@ function NavbarMain({ session }: { session: Session | null }) {
               }
             >
               <span>Logout</span>
-              <IoExit className="text-2xl" />
             </Button>
           </NavbarItem>
         )}
