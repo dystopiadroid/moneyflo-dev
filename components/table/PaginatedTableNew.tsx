@@ -7,7 +7,6 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { Tooltip } from "@nextui-org/tooltip";
-import { incomes, columnsNew } from "./data";
 import React, { useCallback, useMemo } from "react";
 import { EditIcon } from "./EditIcon";
 import { DeleteIcon } from "./DeleteIcon";
@@ -16,9 +15,14 @@ import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { PlusIcon } from "./PlusIcon";
 import { Pagination } from "@nextui-org/pagination";
+import { TableData } from "@/utils/types/tableInfo";
 
-export default function PaginatedTableNew() {
-  type Income = (typeof incomes)[0];
+interface TableProps<T> {
+  tableData: TableData<T>;
+}
+
+export default function PaginatedTableNew<T>({ tableData }: TableProps<T>) {
+  type ItemType = (typeof tableData.rowData)[0];
 
   const topContent = useMemo(() => {
     return (
@@ -69,28 +73,10 @@ export default function PaginatedTableNew() {
     );
   }, []);
 
-  const renderCell = useCallback((income: Income, columnKey: React.Key) => {
-    const cellValue = income[columnKey as keyof Income];
+  const renderCell = useCallback((item: ItemType, columnKey: React.Key) => {
+    const cellValue = item[columnKey as keyof ItemType];
 
     switch (columnKey) {
-      case "title":
-        return (
-          <p className="text-bold text-lg capitalize text-default-500 py-3">
-            {cellValue}
-          </p>
-        );
-      case "amount":
-        return (
-          <p className="text-bold text-lg capitalize text-default-500 py-3">
-            {`₹ ${cellValue}`}
-          </p>
-        );
-      case "date":
-        return (
-          <p className="text-bold text-lg capitalize text-default-500 py-3">
-            {cellValue}
-          </p>
-        );
       case "actions":
         return (
           <div className="relative flex items-center gap-2 py-3">
@@ -146,15 +132,18 @@ export default function PaginatedTableNew() {
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
     >
-      <TableHeader columns={columnsNew}>
+      <TableHeader columns={tableData.columnData}>
         {(column) => (
           <TableColumn key={column.uid} allowsSorting={column.sortable}>
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No Incomes Present:("} items={incomes}>
-        {(item) => (
+      <TableBody
+        emptyContent={"No Incomes Present:("}
+        items={tableData.rowData}
+      >
+        {(item: any) => (
           <TableRow key={item.id}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
