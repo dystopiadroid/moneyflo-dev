@@ -73,7 +73,7 @@ export default function PaginatedTableNew<T>({ tableData }: TableProps<T>) {
     );
   }, []);
 
-  const renderCell = useCallback((item: ItemType, columnKey: React.Key) => {
+  const renderCell = useCallback((item: any, columnKey: React.Key) => {
     const cellValue = item[columnKey as keyof ItemType];
 
     switch (columnKey) {
