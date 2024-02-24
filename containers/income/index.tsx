@@ -5,7 +5,10 @@ import { Income } from "@prisma/client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL =
+  process.env.NEXT_PUBLIC_URL_ENV === "development"
+    ? "http://localhost:3000/api"
+    : "https://moneyflo-dev.vercel.app/api";
 
 const incomeColumns = [
   { name: "TITLE", uid: "title" },
