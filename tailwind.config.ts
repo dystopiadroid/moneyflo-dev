@@ -25,9 +25,14 @@ const config = {
       height: {
         content: "716px",
         infoCard: "200px",
+        document: "120vh",
       },
       width: {
         welcomeMsg: "28ch",
+        summaryCard: "70vw",
+      },
+      spacing: {
+        paginatedTable: "20rem",
       },
       fontSize: {
         google: "14px",

@@ -1,9 +1,9 @@
 import WelcomePage from "@/components/welcome/WelcomePage";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useSession } from "next-auth/react";
-import Income from "./income";
-import Investment from "./investment";
-import Expense from "./expense";
+import Income from "../containers/income";
+import Investment from "../containers/investment";
+import Expense from "../containers/expense";
 import { setCurrentPage } from "@/lib/features/pageSlice";
 import Loader from "./loader";
 
@@ -29,7 +29,7 @@ export default function Home() {
   }
 
   if (session && currentPage === "init") {
-    dispatch(setCurrentPage("income"));
+    dispatch(setCurrentPage("expense"));
   }
 
   switch (currentPage) {

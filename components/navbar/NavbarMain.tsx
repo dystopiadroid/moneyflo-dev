@@ -69,6 +69,15 @@ function NavbarMain() {
       </NavbarBrand>
       <NavbarContent className="hidden text-lg gap-9 sm:flex " justify="center">
         <NavbarItem
+          isActive={activeTab === "expense"}
+          onClick={
+            session ? () => dispatch(setCurrentPage("expense")) : undefined
+          }
+          className="hover:cursor-pointer"
+        >
+          Expenses
+        </NavbarItem>
+        <NavbarItem
           isActive={activeTab === "income"}
           onClick={
             session ? () => dispatch(setCurrentPage("income")) : undefined
@@ -85,15 +94,6 @@ function NavbarMain() {
           className="hover:cursor-pointer"
         >
           Investments
-        </NavbarItem>
-        <NavbarItem
-          isActive={activeTab === "expense"}
-          onClick={
-            session ? () => dispatch(setCurrentPage("expense")) : undefined
-          }
-          className="hover:cursor-pointer"
-        >
-          Expenses
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
