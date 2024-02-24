@@ -11,11 +11,13 @@ export default async function handler(
     return res.status(400).json("User ID is not present");
   }
   try {
+    console.info("Before hitting expense by user id");
     const expenses = await prisma.expense.findMany({
       where: {
         user_id: id,
       },
     });
+    console.log("Before hitting expense by user id");
     if (!expenses) {
       return res.status(400).json("User does not have any expenses");
     }

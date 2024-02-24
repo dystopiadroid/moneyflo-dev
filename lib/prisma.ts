@@ -6,6 +6,7 @@ import { PrismaClient } from "@prisma/client";
 let prisma: PrismaClient;
 
 if (process.env.NEXT_PUBLIC_NODE_ENV === "production") {
+  console.info("Created New Prisma Client");
   prisma = new PrismaClient();
 } else {
   if (!global.prisma) {
