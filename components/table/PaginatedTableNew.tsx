@@ -29,6 +29,7 @@ export default function PaginatedTableNew<T>({ tableData }: TableProps<T>) {
       <div className="flex flex-col gap-4 px-8">
         <div className="flex justify-between gap-3 items-center ">
           <Input
+            aria-label="This is a search input"
             isClearable
             classNames={{
               base: "w-96 sm:max-w-[44%]",
@@ -140,7 +141,7 @@ export default function PaginatedTableNew<T>({ tableData }: TableProps<T>) {
         )}
       </TableHeader>
       <TableBody
-        emptyContent={"No Incomes Present:("}
+        emptyContent={"No Records Present:("}
         items={tableData.rowData}
       >
         {(item: any) => (

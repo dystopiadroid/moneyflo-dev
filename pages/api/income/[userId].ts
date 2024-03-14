@@ -24,6 +24,7 @@ export default async function handler(
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       return res.json(err.message);
     }
-    return res.json(err);
+    if (err instanceof Prisma.PrismaClientInitializationError)
+      return res.json(err.message);
   }
 }

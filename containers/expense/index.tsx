@@ -1,15 +1,13 @@
 import SummaryCard from "@/components/summary/SummaryCard";
 import PaginatedTableNew from "@/components/table/PaginatedTableNew";
+import { setExpenses, setIsExpenseAdded } from "@/lib/features/expenseSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { BASE_API_URL } from "@/utils/constants";
 import { ExpenseRowData, TableData } from "@/utils/types/tableInfo";
 import { Spinner } from "@nextui-org/spinner";
 import { Expense } from "@prisma/client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
-const API_URL =
-  process.env.NEXT_PUBLIC_URL_ENV === "development"
-    ? "http://localhost:3000/api"
-    : "https://moneyflo-dev.vercel.app/api";
 
 const expenseColumns = [
   { name: "DESCRIPTION", uid: "description" },
@@ -20,19 +18,27 @@ const expenseColumns = [
 ];
 
 export default function Expense() {
-  const [expenses, setExpenses] = useState<Expense[]>();
   const [tableData, setTableData] = useState<TableData<ExpenseRowData>>();
+  const userId = useAppSelector((state) => state.common.userId);
+  const expenses = useAppSelector((state) => state.expenses.expenses);
+  const isExpenseAddded = useAppSelector(
+    (state) => state.expenses.isExpenseAdded
+  );
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    async function fetchExpenses() {
-      const response = await axios.get(
-        `${API_URL}/expense/a2b38d9f-d85d-428f-992e-e4e2cf06cb61`
-      );
-      setExpenses(response.data);
+    async function fetchExpenses(id: string) {
+      console.log("inside useEffect of expense with userid : ", userId);
+      if (expenses.length === 0 || isExpenseAddded) {
+        const response = await axios.get(`${BASE_API_URL}/expense/${id}`);
+        dispatch(setExpenses(response.data));
+        dispatch(setIsExpenseAdded(false));
+      }
     }
-
-    fetchExpenses();
-  }, []);
+    if (userId) {
+      fetchExpenses(userId);
+    }
+  }, [userId, dispatch, isExpenseAddded]);
 
   useEffect(() => {
     const newRowData: any = [];
@@ -51,8 +57,6 @@ export default function Expense() {
       columnData: expenseColumns,
     });
   }, [expenses]);
-
-  console.log("Expense Table Data : ", tableData);
 
   return (
     <div className="h-document bg-background flex flex-col justify-center items-center">

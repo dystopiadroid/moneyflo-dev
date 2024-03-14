@@ -1,14 +1,15 @@
 import SummaryCard from "@/components/summary/SummaryCard";
 import PaginatedTableNew from "@/components/table/PaginatedTableNew";
+import {
+  setInvestments,
+  setIsInvestmentAdded,
+} from "@/lib/features/investmentSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { BASE_API_URL } from "@/utils/constants";
 import { InvestmentRowData, TableData } from "@/utils/types/tableInfo";
 import { Investment } from "@prisma/client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
-const API_URL =
-  process.env.NEXT_PUBLIC_URL_ENV === "development"
-    ? "http://localhost:3000/api"
-    : "https://moneyflo-dev.vercel.app/api";
 
 const investmentColumns = [
   { name: "TITLE", uid: "title" },
@@ -19,19 +20,26 @@ const investmentColumns = [
 ];
 
 export default function Investment() {
-  const [investments, setInvestments] = useState<Investment[]>();
   const [tableData, setTableData] = useState<TableData<InvestmentRowData>>();
+  const userId = useAppSelector((state) => state.common.userId);
+  const investments = useAppSelector((state) => state.investments.investments);
+  const isInvestmentAdded = useAppSelector(
+    (state) => state.investments.isInvestmentAdded
+  );
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    async function fetchInvestments() {
-      const response = await axios.get(
-        `${API_URL}/investment/a2b38d9f-d85d-428f-992e-e4e2cf06cb61`
-      );
-      setInvestments(response.data);
+    async function fetchInvestments(id: string) {
+      if (investments.length === 0 || isInvestmentAdded) {
+        const response = await axios.get(`${BASE_API_URL}/investment/${id}`);
+        dispatch(setInvestments(response.data));
+        dispatch(setIsInvestmentAdded(false));
+      }
     }
-
-    fetchInvestments();
-  }, []);
+    if (userId) {
+      fetchInvestments(userId);
+    }
+  }, [userId, dispatch, isInvestmentAdded]);
 
   useEffect(() => {
     const newRowData: any = [];

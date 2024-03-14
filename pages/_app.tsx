@@ -1,6 +1,5 @@
 import NavbarMain from "@/components/navbar/NavbarMain";
 import { Toaster } from "@/components/ui/toaster";
-import { useAppSelector } from "@/lib/hooks";
 import { makeStore } from "@/lib/store";
 import "@/styles/globals.css";
 import { NextUIProvider } from "@nextui-org/react";

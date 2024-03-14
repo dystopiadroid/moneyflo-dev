@@ -1,22 +1,22 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface AuthStatus {
-  authStatus: string;
+  userId: string | null;
 }
 
 const initialState: AuthStatus = {
-  authStatus: "unauthenticated",
+  userId: null,
 };
 
 const commonSlice = createSlice({
   name: "commonSlice",
   initialState,
   reducers: {
-    setAuthStatus: (state, action: PayloadAction<string>) => {
-      state.authStatus = action.payload;
+    setUserId: (state, action: PayloadAction<string>) => {
+      state.userId = action.payload;
     },
   },
 });
 
-export const { setAuthStatus } = commonSlice.actions;
+export const { setUserId } = commonSlice.actions;
 export default commonSlice.reducer;
