@@ -4,11 +4,13 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 interface ExpenseState {
   expenses: Expense[];
   isExpenseAdded: boolean;
+  hasInitialFetchDone: boolean;
 }
 
 const initialState: ExpenseState = {
   expenses: [],
   isExpenseAdded: false,
+  hasInitialFetchDone: false,
 };
 
 const expenseSlice = createSlice({
@@ -21,8 +23,12 @@ const expenseSlice = createSlice({
     setIsExpenseAdded: (state, action: PayloadAction<boolean>) => {
       state.isExpenseAdded = action.payload;
     },
+    setHasInitialFetchDoneExpense: (state, action: PayloadAction<boolean>) => {
+      state.hasInitialFetchDone = action.payload;
+    },
   },
 });
 
-export const { setExpenses, setIsExpenseAdded } = expenseSlice.actions;
+export const { setExpenses, setIsExpenseAdded, setHasInitialFetchDoneExpense } =
+  expenseSlice.actions;
 export default expenseSlice.reducer;

@@ -1,6 +1,11 @@
 import SummaryCard from "@/components/summary/SummaryCard";
 import PaginatedTableNew from "@/components/table/PaginatedTableNew";
-import { setIncomes, setIsIncomeAdded } from "@/lib/features/incomeSlice";
+import { startSpinner, stopSpinner } from "@/lib/features/commonSlice";
+import {
+  setHasInitialFetchDoneIncome,
+  setIncomes,
+  setIsIncomeAdded,
+} from "@/lib/features/incomeSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { BASE_API_URL } from "@/utils/constants";
 import { IncomeRowData, TableData } from "@/utils/types/tableInfo";
@@ -20,14 +25,20 @@ export default function Income() {
   const userId = useAppSelector((state) => state.common.userId);
   const incomes = useAppSelector((state) => state.incomes.incomes);
   const isIncomeAdded = useAppSelector((state) => state.incomes.isIncomeAdded);
+  const initialIncomeFetchDone = useAppSelector(
+    (state) => state.incomes.hasInitialFetchDone
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function fetchIncomes(id: string) {
-      if (incomes.length === 0 || isIncomeAdded) {
+      if (!initialIncomeFetchDone || isIncomeAdded) {
+        dispatch(startSpinner());
+        dispatch(setHasInitialFetchDoneIncome(true));
         const response = await axios.get(`${BASE_API_URL}/income/${id}`);
         dispatch(setIncomes(response.data));
         dispatch(setIsIncomeAdded(false));
+        dispatch(stopSpinner());
       }
     }
 

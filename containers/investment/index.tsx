@@ -1,6 +1,8 @@
 import SummaryCard from "@/components/summary/SummaryCard";
 import PaginatedTableNew from "@/components/table/PaginatedTableNew";
+import { startSpinner, stopSpinner } from "@/lib/features/commonSlice";
 import {
+  setHasInitialFetchDoneInvestment,
   setInvestments,
   setIsInvestmentAdded,
 } from "@/lib/features/investmentSlice";
@@ -26,14 +28,20 @@ export default function Investment() {
   const isInvestmentAdded = useAppSelector(
     (state) => state.investments.isInvestmentAdded
   );
+  const initialInvestmentFetchDone = useAppSelector(
+    (state) => state.investments.hasInitialFetchDone
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function fetchInvestments(id: string) {
-      if (investments.length === 0 || isInvestmentAdded) {
+      if (!initialInvestmentFetchDone || isInvestmentAdded) {
+        dispatch(startSpinner());
+        dispatch(setHasInitialFetchDoneInvestment(true));
         const response = await axios.get(`${BASE_API_URL}/investment/${id}`);
         dispatch(setInvestments(response.data));
         dispatch(setIsInvestmentAdded(false));
+        dispatch(stopSpinner());
       }
     }
     if (userId) {

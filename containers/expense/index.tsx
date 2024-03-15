@@ -1,6 +1,11 @@
 import SummaryCard from "@/components/summary/SummaryCard";
 import PaginatedTableNew from "@/components/table/PaginatedTableNew";
-import { setExpenses, setIsExpenseAdded } from "@/lib/features/expenseSlice";
+import { startSpinner, stopSpinner } from "@/lib/features/commonSlice";
+import {
+  setExpenses,
+  setHasInitialFetchDoneExpense,
+  setIsExpenseAdded,
+} from "@/lib/features/expenseSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { BASE_API_URL } from "@/utils/constants";
 import { ExpenseRowData, TableData } from "@/utils/types/tableInfo";
@@ -21,24 +26,29 @@ export default function Expense() {
   const [tableData, setTableData] = useState<TableData<ExpenseRowData>>();
   const userId = useAppSelector((state) => state.common.userId);
   const expenses = useAppSelector((state) => state.expenses.expenses);
-  const isExpenseAddded = useAppSelector(
+  const isExpenseAdded = useAppSelector(
     (state) => state.expenses.isExpenseAdded
+  );
+  const initialExpenseFetchDone = useAppSelector(
+    (state) => state.expenses.hasInitialFetchDone
   );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function fetchExpenses(id: string) {
-      console.log("inside useEffect of expense with userid : ", userId);
-      if (expenses.length === 0 || isExpenseAddded) {
+      if (!initialExpenseFetchDone || isExpenseAdded) {
+        dispatch(startSpinner());
+        dispatch(setHasInitialFetchDoneExpense(true));
         const response = await axios.get(`${BASE_API_URL}/expense/${id}`);
         dispatch(setExpenses(response.data));
         dispatch(setIsExpenseAdded(false));
+        dispatch(stopSpinner());
       }
     }
     if (userId) {
       fetchExpenses(userId);
     }
-  }, [userId, dispatch, isExpenseAddded]);
+  }, [userId, dispatch, isExpenseAdded]);
 
   useEffect(() => {
     const newRowData: any = [];
@@ -61,7 +71,7 @@ export default function Expense() {
   return (
     <div className="h-document bg-background flex flex-col justify-center items-center">
       <SummaryCard page="expense" />
-      {tableData ? <PaginatedTableNew tableData={tableData} /> : <Spinner />}
+      {tableData && <PaginatedTableNew tableData={tableData} />}
     </div>
   );
 }

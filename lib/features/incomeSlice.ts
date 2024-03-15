@@ -4,11 +4,13 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 interface IncomeState {
   incomes: Income[];
   isIncomeAdded: boolean;
+  hasInitialFetchDone: boolean;
 }
 
 const initialState: IncomeState = {
   incomes: [],
   isIncomeAdded: false,
+  hasInitialFetchDone: false,
 };
 
 const incomeSlice = createSlice({
@@ -21,8 +23,12 @@ const incomeSlice = createSlice({
     setIsIncomeAdded: (state, action: PayloadAction<boolean>) => {
       state.isIncomeAdded = action.payload;
     },
+    setHasInitialFetchDoneIncome: (state, action: PayloadAction<boolean>) => {
+      state.hasInitialFetchDone = action.payload;
+    },
   },
 });
 
-export const { setIncomes, setIsIncomeAdded } = incomeSlice.actions;
+export const { setIncomes, setIsIncomeAdded, setHasInitialFetchDoneIncome } =
+  incomeSlice.actions;
 export default incomeSlice.reducer;

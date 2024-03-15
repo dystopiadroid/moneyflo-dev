@@ -12,6 +12,7 @@ import userInitializeFromDb from "@/utils/helper/userInitializeFromDb";
 export default function Home() {
   const { data: session, status } = useSession();
   const currentPage = useAppSelector((state) => state.page);
+  const showProgress = useAppSelector((state) => state.common.showSpinner);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -20,7 +21,7 @@ export default function Home() {
     }
   }, [session]);
 
-  if (status === "loading") {
+  if (status === "loading" || showProgress) {
     return (
       <div className="h-content flex justify-center items-center">
         <Loader />
