@@ -8,16 +8,21 @@ import { setCurrentPage } from "@/lib/features/pageSlice";
 import Loader from "./loader";
 import { useEffect } from "react";
 import userInitializeFromDb from "@/utils/helper/userInitializeFromDb";
+import { setInitialSessionFetchDone } from "@/lib/features/commonSlice";
 
 export default function Home() {
   const { data: session, status } = useSession();
   const currentPage = useAppSelector((state) => state.page);
   const showProgress = useAppSelector((state) => state.common.showSpinner);
+  const isInitialSessionFetchDone = useAppSelector(
+    (state) => state.common.initialSessionFetchDone
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (session) {
+    if (session && !isInitialSessionFetchDone) {
       userInitializeFromDb(session, dispatch);
+      dispatch(setInitialSessionFetchDone(true));
     }
   }, [session]);
 
