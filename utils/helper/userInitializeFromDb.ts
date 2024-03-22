@@ -25,7 +25,7 @@ export default async function userInitializeFromDb(
       dispatch(stopSpinner());
     } else {
       const { data }: { data: User | null } = await axios(
-        `${BASE_API_URL}/api/user`,
+        `${BASE_API_URL}/user`,
         {
           method: "POST",
           data: {
