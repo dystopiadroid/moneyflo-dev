@@ -1,3 +1,4 @@
+import CreateNewModal from "@/components/modal/CreateNewModal";
 import SummaryCard from "@/components/summary/SummaryCard";
 import PaginatedTableNew from "@/components/table/PaginatedTableNew";
 import { startSpinner, stopSpinner } from "@/lib/features/commonSlice";
@@ -6,6 +7,7 @@ import {
   setInvestments,
   setIsInvestmentAdded,
 } from "@/lib/features/investmentSlice";
+import { setIsOpen } from "@/lib/features/modalSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { BASE_API_URL } from "@/utils/constants";
 import { InvestmentRowData, TableData } from "@/utils/types/tableInfo";
@@ -32,6 +34,10 @@ export default function Investment() {
     (state) => state.investments.hasInitialFetchDone
   );
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setIsOpen(false));
+  }, []);
 
   useEffect(() => {
     async function fetchInvestments(id: string) {
@@ -70,6 +76,7 @@ export default function Investment() {
   return (
     <div className="h-document bg-background flex flex-col justify-center items-center">
       <SummaryCard page="investment" />
+      <CreateNewModal />
       {tableData && <PaginatedTableNew tableData={tableData} />}
     </div>
   );

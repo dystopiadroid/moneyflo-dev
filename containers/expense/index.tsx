@@ -1,3 +1,4 @@
+import CreateNewModal from "@/components/modal/CreateNewModal";
 import SummaryCard from "@/components/summary/SummaryCard";
 import PaginatedTableNew from "@/components/table/PaginatedTableNew";
 import { startSpinner, stopSpinner } from "@/lib/features/commonSlice";
@@ -6,10 +7,10 @@ import {
   setHasInitialFetchDoneExpense,
   setIsExpenseAdded,
 } from "@/lib/features/expenseSlice";
+import { setIsOpen } from "@/lib/features/modalSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { BASE_API_URL } from "@/utils/constants";
 import { ExpenseRowData, TableData } from "@/utils/types/tableInfo";
-import { Spinner } from "@nextui-org/spinner";
 import { Expense } from "@prisma/client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -33,6 +34,10 @@ export default function Expense() {
     (state) => state.expenses.hasInitialFetchDone
   );
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setIsOpen(false));
+  }, []);
 
   useEffect(() => {
     async function fetchExpenses(id: string) {
@@ -71,6 +76,7 @@ export default function Expense() {
   return (
     <div className="h-document bg-background flex flex-col justify-center items-center">
       <SummaryCard page="expense" />
+      <CreateNewModal />
       {tableData && <PaginatedTableNew tableData={tableData} />}
     </div>
   );

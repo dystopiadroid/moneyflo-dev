@@ -16,6 +16,9 @@ import { Button } from "@nextui-org/button";
 import { PlusIcon } from "./PlusIcon";
 import { Pagination } from "@nextui-org/pagination";
 import { TableData } from "@/utils/types/tableInfo";
+import { useDisclosure } from "@nextui-org/react";
+import { useAppDispatch } from "@/lib/hooks";
+import { setIsOpen } from "@/lib/features/modalSlice";
 
 interface TableProps<T> {
   tableData: TableData<T>;
@@ -23,6 +26,13 @@ interface TableProps<T> {
 
 export default function PaginatedTableNew<T>({ tableData }: TableProps<T>) {
   type ItemType = (typeof tableData.rowData)[0];
+  const { onOpen } = useDisclosure();
+  const dispatch = useAppDispatch();
+
+  const handleOnAddNewPress = () => {
+    onOpen();
+    dispatch(setIsOpen(true));
+  };
 
   const topContent = useMemo(() => {
     return (
@@ -44,6 +54,7 @@ export default function PaginatedTableNew<T>({ tableData }: TableProps<T>) {
             className="bg-foreground text-background"
             endContent={<PlusIcon />}
             size="md"
+            onPress={() => handleOnAddNewPress()}
           >
             Add New
           </Button>

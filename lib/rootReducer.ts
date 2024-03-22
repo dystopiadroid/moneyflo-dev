@@ -4,6 +4,7 @@ import page from "@/lib/features/pageSlice";
 import incomes from "@/lib/features/incomeSlice";
 import expenses from "@/lib/features/expenseSlice";
 import investments from "@/lib/features/investmentSlice";
+import modal from "@/lib/features/modalSlice";
 
 const rootReducer = combineReducers({
   common,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   incomes,
   expenses,
   investments,
+  modal,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

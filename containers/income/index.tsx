@@ -1,3 +1,4 @@
+import CreateNewModal from "@/components/modal/CreateNewModal";
 import SummaryCard from "@/components/summary/SummaryCard";
 import PaginatedTableNew from "@/components/table/PaginatedTableNew";
 import { startSpinner, stopSpinner } from "@/lib/features/commonSlice";
@@ -6,6 +7,7 @@ import {
   setIncomes,
   setIsIncomeAdded,
 } from "@/lib/features/incomeSlice";
+import { setIsOpen } from "@/lib/features/modalSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { BASE_API_URL } from "@/utils/constants";
 import { IncomeRowData, TableData } from "@/utils/types/tableInfo";
@@ -29,6 +31,10 @@ export default function Income() {
     (state) => state.incomes.hasInitialFetchDone
   );
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setIsOpen(false));
+  }, []);
 
   useEffect(() => {
     async function fetchIncomes(id: string) {
@@ -67,6 +73,7 @@ export default function Income() {
   return (
     <div className="h-document bg-background flex flex-col justify-center items-center">
       <SummaryCard page="income" />
+      <CreateNewModal />
       {tableData && <PaginatedTableNew tableData={tableData} />}
     </div>
   );
