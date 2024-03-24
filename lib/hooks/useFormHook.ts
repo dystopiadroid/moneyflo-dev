@@ -37,6 +37,9 @@ export default function useFormHook() {
           date: convertedDate,
           user_id: userId,
         },
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
       if (response.status === 201) {
         dispatch(setIsOpen(false));
@@ -64,6 +67,9 @@ export default function useFormHook() {
           amount,
           date: convertedDate,
           user_id: userId,
+        },
+        headers: {
+          "Content-Type": "application/json",
         },
       });
       if (response.status === 201) {
@@ -93,6 +99,9 @@ export default function useFormHook() {
           amount,
           date: convertedDate,
           user_id: userId,
+        },
+        headers: {
+          "Content-Type": "application/json",
         },
       });
       if (response.status === 201) {
