@@ -44,9 +44,9 @@ export default async function handler(
       return res.status(201).json(investment);
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        return res.json(err.message);
+        return res.status(404).json(err.message);
       }
-      return res.json(err);
+      return res.status(404).json(err);
     }
   }
 }
