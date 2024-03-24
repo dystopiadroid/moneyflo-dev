@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface IncomeRequest {
@@ -22,8 +23,6 @@ export default async function handler(
       return res.status(400).json("Amount should only contain numeric value");
     }
     try {
-      console.info(`Amount is : ${amount} and of type : ${typeof amount}`);
-      console.info(`date is : ${date} and of type : ${typeof date}`);
       const income = await prisma.income.create({
         data: {
           title,

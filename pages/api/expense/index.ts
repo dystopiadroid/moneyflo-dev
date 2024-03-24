@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface ExpenseRequest {
@@ -46,6 +47,7 @@ export default async function handler(
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         return res.status(404).json(err.message);
       }
+      console.info("error : ", err);
       return res.status(404).json(err);
     }
   }
