@@ -30,6 +30,7 @@ export default async function handler(
           user_id: userId,
         },
       });
+      console.info("After income creation : ", income);
       if (!income) {
         return res.status(400).json("Income not created");
       }
