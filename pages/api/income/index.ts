@@ -21,7 +21,9 @@ export default async function handler(
     if (!regex.test(amount)) {
       return res.status(400).json("Amount should only contain numeric value");
     }
+    console.info("Before try block");
     try {
+      console.info("After try block");
       const income = await prisma.income.create({
         data: {
           title,
