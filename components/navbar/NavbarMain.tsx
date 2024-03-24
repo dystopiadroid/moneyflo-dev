@@ -8,7 +8,6 @@ import {
 import { Link } from "@nextui-org/link";
 import { Button } from "@nextui-org/button";
 import { signOut, useSession } from "next-auth/react";
-import { useToast } from "../ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { setCurrentPage } from "@/lib/features/pageSlice";
 
@@ -16,7 +15,6 @@ function NavbarMain() {
   const [activeTab, setActiveTab] = useState("");
   const dispatch = useAppDispatch();
   const currentPage = useAppSelector((state) => state.page);
-  const { toast } = useToast();
   const { data: session, status } = useSession();
 
   useEffect(() => {
@@ -58,14 +56,11 @@ function NavbarMain() {
       }}
     >
       <NavbarBrand>
-        <Link className="font-bold text-white hover:cursor-pointer">
-          <p
-            className="font-bold text-inherit text-2xl"
-            onClick={() => toast({ title: "Hello" })}
-          >
+        <div className="font-bold text-white hover:cursor-pointer">
+          <p className="font-bold text-inherit text-2xl">
             {session ? headerNameTransform(session.user?.name) : "MoneyFlo"}
           </p>
-        </Link>
+        </div>
       </NavbarBrand>
       <NavbarContent className="hidden text-lg gap-9 sm:flex " justify="center">
         <NavbarItem

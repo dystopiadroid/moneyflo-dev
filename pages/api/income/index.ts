@@ -1,9 +1,8 @@
 import { Prisma } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
-interface ExpenseRequest {
-  description: string;
-  category: string;
+interface IncomeRequest {
+  title: string;
   amount: string;
   date: Date;
   user_id: string;
@@ -14,14 +13,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method == "POST") {
-    const {
-      description,
-      category,
-      amount,
-      date,
-      user_id: userId,
-    }: ExpenseRequest = req.body;
-    if (!description || !category || !amount || !date || !userId) {
+    const { title, amount, date, user_id: userId }: IncomeRequest = req.body;
+    if (!title || !amount || !date || !userId) {
       return res.status(400).json("Fill out all the fields before submitting!");
     }
     const regex = /^[0-9]+$/;
@@ -29,19 +22,18 @@ export default async function handler(
       return res.status(400).json("Amount should only contain numeric value");
     }
     try {
-      const expense = await prisma.expense.create({
+      const income = await prisma.income.create({
         data: {
-          description,
-          category,
+          title,
           amount,
           date,
           user_id: userId,
         },
       });
-      if (!expense) {
-        return res.status(400).json("Expense not created");
+      if (!income) {
+        return res.status(400).json("Income not created");
       }
-      return res.status(201).json(expense);
+      return res.status(201).json(income);
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         return res.json(err.message);
