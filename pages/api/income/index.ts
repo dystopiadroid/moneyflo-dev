@@ -21,9 +21,9 @@ export default async function handler(
     if (!regex.test(amount)) {
       return res.status(400).json("Amount should only contain numeric value");
     }
-    console.info("Before try block");
     try {
-      console.info("After try block");
+      console.info(`Amount is : ${amount} and of type : ${typeof amount}`);
+      console.info(`date is : ${date} and of type : ${typeof date}`);
       const income = await prisma.income.create({
         data: {
           title,
@@ -32,7 +32,6 @@ export default async function handler(
           user_id: userId,
         },
       });
-      console.info("After income creation : ", income);
       if (!income) {
         return res.status(400).json("Income not created");
       }
@@ -41,6 +40,7 @@ export default async function handler(
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         return res.status(404).json(err.message);
       }
+      console.info("error : ", err);
       return res.status(404).json(err);
     }
   }
