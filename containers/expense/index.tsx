@@ -16,7 +16,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const expenseColumns = [
-  { name: "DESCRIPTION", uid: "description" },
+  { name: "Title", uid: "title" },
   { name: "CATEGORY", uid: "category" },
   { name: "AMOUNT", uid: "amount", sortable: true },
   { name: "DATE", uid: "date", sortable: true },
@@ -60,7 +60,7 @@ export default function Expense() {
     expenses?.map((expense: Expense) => {
       newRowData.push({
         id: expense.id,
-        description: expense.description,
+        title: expense.title,
         category: expense.category,
         amount: expense.amount,
         date: new Date(expense.date).toISOString().slice(0, 10),

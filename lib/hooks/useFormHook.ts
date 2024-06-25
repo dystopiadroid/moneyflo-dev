@@ -8,29 +8,12 @@ import { setIsOpen } from "../features/modalSlice";
 import { setCurrentPage } from "../features/pageSlice";
 import { setIsIncomeAdded } from "../features/incomeSlice";
 import { setIsInvestmentAdded } from "../features/investmentSlice";
-import {
-  ExpenseRowData,
-  IncomeRowData,
-  InvestmentRowData,
-} from "@/utils/types/tableInfo";
 
 export default function useFormHook() {
-  function isExpenseRowData(item: any): item is ExpenseRowData {
-    return typeof item === "object" && "description" in item;
-  }
-
-  function isIncomeRowData(item: any): item is IncomeRowData {
-    return typeof item === "object" && !("category" in item);
-  }
 
   const isEdit = useAppSelector((state) => state.modal.isEdit);
   const selectedItem = useAppSelector((state) => state.item.selectedItem);
-  const [title, setTitle] =
-    isEdit && selectedItem != null
-      ? isExpenseRowData(selectedItem)
-        ? useState<string>(selectedItem.description)
-        : useState<string>(selectedItem?.title)
-      : useState<string>();
+  const [title, setTitle] = selectedItem != null && isEdit ? useState<>(selectedItem.title) : useState<>();
   const [amount, setAmount] =
     isEdit && selectedItem != null
       ? useState<number>(selectedItem.amount)
@@ -41,10 +24,14 @@ export default function useFormHook() {
       : useState<string>();
   const [category, setCategory] =
     isEdit && selectedItem != null
-      ? !isIncomeRowData(selectedItem)
-        ? useState<string>(selectedItem.category)
-        : useState<string>()
-      : useState<string>();
+        ? useState<>(() => {
+          if('category' in selectedItem){
+            return selectedItem.category;
+          }
+          return ''
+        })
+        : useState<>("")
+
   const { toast } = useToast();
   const currentModalTab = useAppSelector(
     (state) => state.modal.currentModalTab
@@ -62,7 +49,7 @@ export default function useFormHook() {
       const response = await axios(`${BASE_API_URL}/expense`, {
         method: "POST",
         data: {
-          description: title,
+          title,
           category,
           amount,
           date: convertedDate,

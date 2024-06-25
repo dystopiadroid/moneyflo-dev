@@ -6,7 +6,7 @@ export interface TableData<T> {
 
 export interface ExpenseRowData {
   id: string;
-  description: string;
+  title: string;
   category: string;
   amount: number;
   date: string;

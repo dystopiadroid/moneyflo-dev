@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface ExpenseRequest {
-  description: string;
+  title: string;
   category: string;
   amount: string;
   date: Date;
@@ -16,13 +16,13 @@ export default async function handler(
 ) {
   if (req.method == "POST") {
     const {
-      description,
+      title,
       category,
       amount,
       date,
       user_id: userId,
     }: ExpenseRequest = req.body;
-    if (!description || !category || !amount || !date || !userId) {
+    if (!title || !category || !amount || !date || !userId) {
       return res.status(400).json("Fill out all the fields before submitting!");
     }
     const regex = /^[0-9]+$/;
@@ -32,7 +32,7 @@ export default async function handler(
     try {
       const expense = await prisma.expense.create({
         data: {
-          description,
+          title,
           category,
           amount,
           date,

@@ -4,54 +4,45 @@ import { ModalTabType } from "@/lib/features/modalSlice";
 import React from "react";
 
 interface CategoryProps {
+  isEdit: boolean,
   currentModalTab: ModalTabType;
   setCategory: Function;
-  category: string | undefined;
+  category: string;
 }
 
 export default function CategoryDropdown({
+  isEdit,
   currentModalTab,
   setCategory,
   category,
 }: CategoryProps) {
-  if (category == undefined) {
+
+  if(currentModalTab === "income"){
     return;
   }
 
   return (
     <>
-      {currentModalTab === "expense" && (
-        <Select
+      <Select
           color="primary"
           variant="bordered"
           placeholder="Select Category"
           className="max-w-xs"
-          defaultSelectedKeys={[]}
+          defaultSelectedKeys={isEdit ? [category] : undefined}
           onChange={(e) => setCategory(e.target.value)}
-        >
-          {expenseCategories.map((item) => (
+      >
+        {currentModalTab === "expense" ? (
+            expenseCategories.map((item: string) => (
+                <SelectItem color="primary" key={item} value={item}>
+                  {item}
+                </SelectItem>
+            ))
+        ) : (investmentCategories.map((item: string) => (
             <SelectItem color="primary" key={item} value={item}>
               {item}
             </SelectItem>
-          ))}
-        </Select>
-      )}
-      {currentModalTab === "investment" && (
-        <Select
-          color="primary"
-          variant="bordered"
-          placeholder="Select Category"
-          className="max-w-xs"
-          defaultSelectedKeys={[category]}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          {investmentCategories.map((item) => (
-            <SelectItem color="primary" key={item} value={item}>
-              {item}
-            </SelectItem>
-          ))}
-        </Select>
-      )}
+        )))}
+      </Select>
     </>
   );
 }

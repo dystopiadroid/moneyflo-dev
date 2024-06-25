@@ -86,6 +86,7 @@ export default function AddNewForm({
               currentModalTab={currentModalTab}
               setCategory={setCategory}
               category={category}
+              isEdit={isEdit}
             />
           </ModalBody>
           <ModalFooter className="flex justify-center">
