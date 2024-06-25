@@ -15,11 +15,21 @@ import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { PlusIcon } from "./PlusIcon";
 import { Pagination } from "@nextui-org/pagination";
-import { TableData } from "@/utils/types/tableInfo";
+import {
+  ExpenseRowData,
+  IncomeRowData,
+  InvestmentRowData,
+  TableData,
+} from "@/utils/types/tableInfo";
 import { useDisclosure } from "@nextui-org/react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { setCurrentModalTab, setIsOpen } from "@/lib/features/modalSlice";
+import {
+  setCurrentModalTab,
+  setIsEdit,
+  setIsOpen,
+} from "@/lib/features/modalSlice";
 import { ModalTabType } from "@/lib/features/modalSlice";
+import { setSelectedItem } from "@/lib/features/itemSlice";
 
 interface TableProps<T> {
   tableData: TableData<T>;
@@ -32,6 +42,17 @@ export default function PaginatedTableNew<T>({ tableData }: TableProps<T>) {
   const currentPage = useAppSelector((state) => state.page) as ModalTabType;
 
   const handleOnAddNewPress = () => {
+    onOpen();
+    dispatch(setIsEdit(false));
+    dispatch(setIsOpen(true));
+    dispatch(setCurrentModalTab(currentPage));
+  };
+
+  const handleOnEditPress = (
+    item: ExpenseRowData | IncomeRowData | InvestmentRowData
+  ) => {
+    dispatch(setIsEdit(true));
+    dispatch(setSelectedItem(item));
     onOpen();
     dispatch(setIsOpen(true));
     dispatch(setCurrentModalTab(currentPage));
@@ -96,7 +117,10 @@ export default function PaginatedTableNew<T>({ tableData }: TableProps<T>) {
         return (
           <div className="relative flex items-center gap-2 py-3">
             <Tooltip content="Edit user">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <span
+                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                onClick={() => handleOnEditPress(item)}
+              >
                 <EditIcon />
               </span>
             </Tooltip>

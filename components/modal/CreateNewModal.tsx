@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
 import { Modal } from "@nextui-org/react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { setCurrentModalTab, setIsOpen } from "@/lib/features/modalSlice";
+import {
+  setCurrentModalTab,
+  setIsEdit,
+  setIsOpen,
+} from "@/lib/features/modalSlice";
 import { ModalTabType } from "@/lib/features/modalSlice";
 import AddNewForm from "../form/AddNewForm";
+import { setSelectedItem } from "@/lib/features/itemSlice";
 
 export default function CreateNewModal() {
   const isOpen = useAppSelector((state) => state.modal.isOpen);
@@ -11,6 +16,7 @@ export default function CreateNewModal() {
   const currentModalTab = useAppSelector(
     (state) => state.modal.currentModalTab
   );
+  const isEdit = useAppSelector((state) => state.modal.isEdit);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -20,7 +26,9 @@ export default function CreateNewModal() {
   }, [currentPage]);
 
   const onClose = () => {
+    dispatch(setIsEdit(false));
     dispatch(setIsOpen(false));
+    dispatch(setSelectedItem(null));
   };
 
   return (
@@ -32,6 +40,7 @@ export default function CreateNewModal() {
       backdrop="opaque"
     >
       <AddNewForm
+        isEdit={isEdit}
         currentPage={currentPage}
         currentModalTab={currentModalTab}
         setCurrentModalTab={setCurrentModalTab}

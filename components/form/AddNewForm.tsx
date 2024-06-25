@@ -14,12 +14,14 @@ import CategoryDropdown from "./CategoryDropdown";
 import useFormHook from "@/lib/hooks/useFormHook";
 
 interface FormProps {
+  isEdit: boolean;
   currentPage: ModalTabType;
   currentModalTab: ModalTabType;
   setCurrentModalTab: any;
 }
 
 export default function AddNewForm({
+  isEdit,
   currentPage,
   currentModalTab,
   setCurrentModalTab,
@@ -35,6 +37,7 @@ export default function AddNewForm({
     date,
     title,
     setCategory,
+    category,
   } = useFormHook();
 
   return (
@@ -63,23 +66,26 @@ export default function AddNewForm({
               value={date}
               onChange={(e: any) => setDate(e.target.value)}
             />
-            <Tabs
-              aria-label="Options"
-              color="primary"
-              variant="light"
-              className="my-5 text-3xl"
-              defaultSelectedKey={currentPage}
-              onSelectionChange={(key: any) =>
-                dispatch(setCurrentModalTab(key))
-              }
-            >
-              <Tab key="expense" title="Expense"></Tab>
-              <Tab key="income" title="Income"></Tab>
-              <Tab key="investment" title="Investment"></Tab>
-            </Tabs>
+            {!isEdit && (
+              <Tabs
+                aria-label="Options"
+                color="primary"
+                variant="light"
+                className="my-5 text-3xl"
+                defaultSelectedKey={currentPage}
+                onSelectionChange={(key: any) =>
+                  dispatch(setCurrentModalTab(key))
+                }
+              >
+                <Tab key="expense" title="Expense"></Tab>
+                <Tab key="income" title="Income"></Tab>
+                <Tab key="investment" title="Investment"></Tab>
+              </Tabs>
+            )}
             <CategoryDropdown
               currentModalTab={currentModalTab}
               setCategory={setCategory}
+              category={category}
             />
           </ModalBody>
           <ModalFooter className="flex justify-center">

@@ -6,12 +6,18 @@ import React from "react";
 interface CategoryProps {
   currentModalTab: ModalTabType;
   setCategory: Function;
+  category: string | undefined;
 }
 
 export default function CategoryDropdown({
   currentModalTab,
   setCategory,
+  category,
 }: CategoryProps) {
+  if (category == undefined) {
+    return;
+  }
+
   return (
     <>
       {currentModalTab === "expense" && (
@@ -20,6 +26,7 @@ export default function CategoryDropdown({
           variant="bordered"
           placeholder="Select Category"
           className="max-w-xs"
+          defaultSelectedKeys={[]}
           onChange={(e) => setCategory(e.target.value)}
         >
           {expenseCategories.map((item) => (
@@ -35,6 +42,7 @@ export default function CategoryDropdown({
           variant="bordered"
           placeholder="Select Category"
           className="max-w-xs"
+          defaultSelectedKeys={[category]}
           onChange={(e) => setCategory(e.target.value)}
         >
           {investmentCategories.map((item) => (
