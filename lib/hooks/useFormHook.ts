@@ -13,7 +13,7 @@ export default function useFormHook() {
 
   const isEdit = useAppSelector((state) => state.modal.isEdit);
   const selectedItem = useAppSelector((state) => state.item.selectedItem);
-  const [title, setTitle] = selectedItem != null && isEdit ? useState<>(selectedItem.title) : useState<>();
+  const [title, setTitle] = selectedItem != null && isEdit ? useState<string>(selectedItem.title) : useState<string>();
   const [amount, setAmount] =
     isEdit && selectedItem != null
       ? useState<number>(selectedItem.amount)
@@ -24,13 +24,13 @@ export default function useFormHook() {
       : useState<string>();
   const [category, setCategory] =
     isEdit && selectedItem != null
-        ? useState<>(() => {
+        ? useState<string>(() => {
           if('category' in selectedItem){
             return selectedItem.category;
           }
           return ''
         })
-        : useState<>("")
+        : useState<string>("")
 
   const { toast } = useToast();
   const currentModalTab = useAppSelector(
